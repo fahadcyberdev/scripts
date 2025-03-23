@@ -4,6 +4,7 @@
 from __future__ import print_function
 import sys
 import time
+import os
 
 # Attempt to import the googlesearch module
 try:
@@ -55,12 +56,21 @@ def dorks():
         
         save_output = input(f"{Colors.BLUE}\n[+] Do You Want to Save the Output? (Y/N): {Colors.RESET}").strip().lower()
         if save_output == "y":
-            log_file = input(f"{Colors.BLUE}[+] Enter Output Filename: {Colors.RESET}").strip()
+            log_file = input(f"{Colors.BLUE}[+] Enter Output Filename (default: dorks_output.txt): {Colors.RESET}").strip()
             if not log_file:
                 log_file = "dorks_output.txt"
             if not log_file.endswith(".txt"):
                 log_file += ".txt"
-        
+            
+            file_path = input(f"{Colors.BLUE}[+] Enter the full path where you want to save the file (default: current directory): {Colors.RESET}").strip()
+            if file_path:
+                if not os.path.exists(file_path):
+                    print(f"{Colors.RED}[ERROR] The provided path does not exist. Saving in the current directory instead.{Colors.RESET}")
+                    file_path = os.getcwd()
+                log_file = os.path.join(file_path, log_file)
+            else:
+                log_file = os.path.join(os.getcwd(), log_file)
+
         print(f"\n{Colors.GREEN}[INFO] Searching... Please wait...{Colors.RESET}\n")
         
         fetched = 0
